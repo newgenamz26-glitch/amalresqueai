@@ -1,0 +1,14 @@
+{
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "name": " Responder ResQ ",
+  "short_name": "ResQ Cloud",
+  "description": "Sistem Pengurusan Kes Kecemasan Awan ResQ Amal UPDATE VERSION ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb"
+}
