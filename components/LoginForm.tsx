@@ -222,8 +222,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, isOnline }) => {
           
           {/* Branding Section */}
           <div className="text-center mb-8">
-            <div className="w-20 h-20 bg-blue-600 rounded-[2rem] flex items-center justify-center text-white mx-auto mb-5 shadow-2xl shadow-blue-100 -rotate-3 transition-transform hover:rotate-0">
-              <Shield size={36} />
+            <div className="relative w-fit mx-auto mb-5">
+              <div className="w-20 h-20 bg-blue-600 rounded-[2rem] flex items-center justify-center text-white shadow-2xl shadow-blue-100 -rotate-3 transition-transform hover:rotate-0">
+                <Shield size={36} />
+              </div>
+              {/* Version Number v1.0 */}
+              <div className="absolute -bottom-2 -right-2 bg-slate-900 text-white text-[8px] font-black px-2 py-0.5 rounded-full border-2 border-white shadow-lg uppercase tracking-tighter">
+                v1.0
+              </div>
             </div>
             <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none">
               Responder <span className="text-blue-600 italic">ResQ</span>
