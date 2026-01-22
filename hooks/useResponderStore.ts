@@ -4,7 +4,9 @@ import { AppState, StorageMode, CaseRecord, UserSession, SyncStatus, SessionSumm
 import { callSheetApi, pingDatabase, fetchFromSheet } from '../services/googleSheetService';
 
 const APP_ID = 'responder-cloud-v20-pro';
+const APP_VERSION = '2.1.0'; // Current System Version
 const BASE_STORAGE_KEY = `responder_v2_${APP_ID}`;
+const VERSION_KEY = `${BASE_STORAGE_KEY}_version`;
 const LOGS_STORAGE_KEY = `${BASE_STORAGE_KEY}_user_logs`;
 
 export const useResponderStore = () => {
@@ -20,6 +22,7 @@ export const useResponderStore = () => {
   const [lastSummary, setLastSummary] = useState<SessionSummary | null>(null);
   const [isDbConnected, setIsDbConnected] = useState<boolean | null>(null);
   const [latency, setLatency] = useState<number | null>(null);
+  const [showUpdateNotice, setShowUpdateNotice] = useState(false);
 
   const getUserDataKey = (u: UserSession) => `${BASE_STORAGE_KEY}_data_${u.name.replace(/\s+/g, '_')}_${u.checkpoint.replace(/\s+/g, '_')}`;
 
@@ -27,6 +30,12 @@ export const useResponderStore = () => {
     const handleStatusChange = () => setIsOnline(navigator.onLine);
     window.addEventListener('online', handleStatusChange);
     window.addEventListener('offline', handleStatusChange);
+
+    // Check for Version Updates
+    const storedVersion = localStorage.getItem(VERSION_KEY);
+    if (storedVersion !== APP_VERSION) {
+      setShowUpdateNotice(true);
+    }
 
     const savedSession = localStorage.getItem(`${BASE_STORAGE_KEY}_session`);
     const savedLogs = localStorage.getItem(LOGS_STORAGE_KEY);
@@ -52,6 +61,11 @@ export const useResponderStore = () => {
       window.removeEventListener('offline', handleStatusChange);
     };
   }, []);
+
+  const acknowledgeUpdate = () => {
+    localStorage.setItem(VERSION_KEY, APP_VERSION);
+    setShowUpdateNotice(false);
+  };
 
   const showNotification = (message: string, type: 'success' | 'info' = 'success') => {
     setNotification({ message, type });
@@ -243,7 +257,7 @@ export const useResponderStore = () => {
   };
 
   return {
-    appState, user, isOnline, cases, cloudCasesPreview, attendanceRecords, logs, syncStatus, notification, lastSummary, isDbConnected, latency,
+    appState, user, isOnline, cases, cloudCasesPreview, attendanceRecords, logs, syncStatus, notification, lastSummary, isDbConnected, latency, showUpdateNotice, acknowledgeUpdate,
     login, logout, confirmLogout, addCase, sync, testConnection, fetchCloudPreview, fetchAttendanceRecords, setStorageMode, clearLocalData
   };
 };

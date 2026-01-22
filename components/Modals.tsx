@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { X, ClipboardList, Send, User, MapPin, Activity, Heart, CheckCircle, MessageSquare, Zap, ShieldAlert, Clock, Info, Thermometer, Droplets, Navigation, RefreshCw, Map as MapIcon, UserCheck, CheckCircle2, Mic, MicOff, Share2, AlertCircle, ShieldEllipsis, AlertTriangle } from 'lucide-react';
+// Added 'Database' to the lucide-react imports to resolve the 'Cannot find name Database' error.
+import { X, ClipboardList, Send, User, MapPin, Activity, Heart, CheckCircle, MessageSquare, Zap, ShieldAlert, Clock, Info, Thermometer, Droplets, Navigation, RefreshCw, Map as MapIcon, UserCheck, CheckCircle2, Mic, MicOff, Share2, AlertCircle, ShieldEllipsis, AlertTriangle, Sparkles, Rocket, CheckCircle2 as Check, Database } from 'lucide-react';
 import { Gender, CaseRecord } from '../types';
 import { startLiveAssistant } from '../services/geminiService';
 
@@ -431,7 +432,6 @@ export const CaseEntryModal = ({ isOpen, onClose, onSubmit, isSimulasi, responde
   );
 };
 
-// ... (CaseDetailModal, SubmissionSuccessModal, and WhatsAppPreviewModal stay the same as in previous file)
 export const CaseDetailModal = ({ selectedCase, onClose }: { selectedCase: CaseRecord | null, onClose: () => void }) => {
   if (!selectedCase) return null;
 
@@ -609,6 +609,61 @@ REKOD OLEH: ${selectedCase.namaPerawat}${loc}`;
           <button onClick={handleSendWA} className="w-full py-6 bg-[#25D366] text-white rounded-[2rem] font-black uppercase text-[11px] tracking-[0.2em] shadow-xl shadow-green-100 active:scale-95 transition-all flex items-center justify-center gap-3">
             <Send size={18}/> Hantar ke WhatsApp
           </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const VersionUpdateModal = ({ isOpen, onAcknowledge }: { isOpen: boolean, onAcknowledge: () => void }) => {
+  if (!isOpen) return null;
+
+  const updates = [
+    { title: "Auto-Fill Logic", desc: "Butang Zap baru di Login & Borang untuk simulasi pantas.", icon: Zap, color: "text-amber-500" },
+    { title: "Status GP & Network", desc: "Pantauan real-time status lokasi & pangkalan data di Main Login.", icon: MapPin, color: "text-emerald-500" },
+    { title: "Pusat Kawalan Data", desc: "Diagnostic hub baru untuk semakan latency & backup pangkalan data.", icon: Database, color: "text-blue-600" },
+    { title: "Mikrofon Proaktif", desc: "Sistem amaran visual jika akses suara disekat oleh pelayar.", icon: Mic, color: "text-rose-500" }
+  ];
+
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
+      <div className="absolute inset-0 bg-slate-900/95 backdrop-blur-xl"></div>
+      <div className="bg-white w-full max-w-lg rounded-[3.5rem] overflow-hidden shadow-4xl relative z-10 animate-in zoom-in-95 flex flex-col max-h-[85vh]">
+        <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-10 text-white relative">
+          <div className="absolute top-0 right-0 p-12 opacity-10 rotate-12"><Rocket size={140} /></div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-4 bg-white/10 w-fit px-4 py-1.5 rounded-full border border-white/10">
+              <Sparkles size={12} className="text-amber-400"/>
+              <p className="text-[9px] font-black uppercase tracking-[0.3em]">Kemas Kini Sistem v2.1.0</p>
+            </div>
+            <h2 className="text-4xl font-black italic tracking-tighter uppercase leading-none">Apa Yang<br/><span className="text-blue-200">Terbaru?</span></h2>
+          </div>
+        </div>
+        
+        <div className="p-10 flex-1 overflow-y-auto custom-scrollbar space-y-8 bg-white">
+          <div className="space-y-6">
+            {updates.map((item, i) => (
+              <div key={i} className="flex gap-5 group animate-in slide-in-from-right-8" style={{ animationDelay: `${i * 100}ms` }}>
+                <div className={`shrink-0 w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center ${item.color} group-hover:scale-110 transition-transform`}>
+                  <item.icon size={20} strokeWidth={2.5} />
+                </div>
+                <div>
+                  <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-1">{item.title}</h4>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="pt-6 border-t border-slate-100">
+            <button 
+              onClick={onAcknowledge}
+              className="w-full py-6 bg-blue-600 text-white rounded-[2.5rem] font-black uppercase text-xs tracking-[0.3em] shadow-xl shadow-blue-200 active:scale-95 transition-all flex items-center justify-center gap-3"
+            >
+              Faham & Mula Bertugas <Check size={18} />
+            </button>
+            <p className="text-center text-[8px] font-black text-slate-300 uppercase tracking-[0.4em] mt-6">ResQ Amal v2.1.0 • 2024</p>
+          </div>
         </div>
       </div>
     </div>

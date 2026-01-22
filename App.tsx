@@ -5,7 +5,7 @@ import { AppState, CaseRecord } from './types';
 import { useResponderStore } from './hooks/useResponderStore';
 import { Header, Sidebar } from './components/Layout';
 import { DashboardView, HistoryView, LogRecordsView, SummaryView, ReferralView, DatabaseSettingsView } from './components/Views';
-import { CaseEntryModal, CaseDetailModal, SubmissionSuccessModal, WhatsAppPreviewModal } from './components/Modals';
+import { CaseEntryModal, CaseDetailModal, SubmissionSuccessModal, WhatsAppPreviewModal, VersionUpdateModal } from './components/Modals';
 import LoginForm from './components/LoginForm';
 import { getNearbyMedicalFacilities } from './services/geminiService';
 
@@ -66,7 +66,12 @@ const App: React.FC = () => {
     </div>
   );
 
-  if (store.appState === AppState.LOGIN) return <LoginForm onLogin={store.login} isOnline={store.isOnline} />;
+  if (store.appState === AppState.LOGIN) return (
+    <>
+      <LoginForm onLogin={store.login} isOnline={store.isOnline} />
+      <VersionUpdateModal isOpen={store.showUpdateNotice} onAcknowledge={store.acknowledgeUpdate} />
+    </>
+  );
 
   if (store.appState === AppState.SUMMARY) return <SummaryView summary={store.lastSummary} onConfirm={store.confirmLogout} />;
 
@@ -173,6 +178,7 @@ const App: React.FC = () => {
 
       <SubmissionSuccessModal isOpen={showSuccessModal} onClose={() => setShowSuccessModal(false)} onShare={() => { setShowSuccessModal(false); setShowWAPreview(true); }} />
       <WhatsAppPreviewModal isOpen={showWAPreview} selectedCase={lastSubmittedCase} onClose={() => setShowWAPreview(false)} />
+      <VersionUpdateModal isOpen={store.showUpdateNotice} onAcknowledge={store.acknowledgeUpdate} />
     </div>
   );
 };
